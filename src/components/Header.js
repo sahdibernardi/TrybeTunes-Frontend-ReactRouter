@@ -2,6 +2,7 @@ import React from 'react';
 // import { BrowserRouter } from 'react-router-dom';
 import { getUser } from '../services/userAPI';
 import Loading from './Loading';
+import Navigation from './Navigation';
 
 class Header extends React.Component {
   state = {
@@ -23,11 +24,14 @@ class Header extends React.Component {
     const { isLoading, user } = this.state;
     // console.log(user);
     return (
-      <header data-testid="header-component">
-        { isLoading
-          ? <Loading />
-          : <p data-testid="header-user-name">{ user }</p> }
-      </header>
+      <>
+        <header data-testid="header-component">
+          { isLoading
+            ? <Loading />
+            : <p data-testid="header-user-name">{ user }</p> }
+        </header>
+        <Navigation />
+      </>
     );
   }
 }
