@@ -1,16 +1,26 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
-// import { BrowserRouter } from 'react-router-dom';
+import Loading from '../components/Loading';
+import searchAlbumsAPI from '../services/searchAlbumsAPI';
 
 class Search extends React.Component {
   state = {
     artistName: '',
     buttonOn: true,
+    isLoading: false,
+    results: [],
+    saveArtist: '',
   };
 
   handleSearchArtist = (event) => {
     // const { name } = this.state;
-    this.setState({ artistName: event.target.value }, this.enableButton);
+    this.setState({
+      artistName: event.target.value,
+    }, this.enableButton);
+    // this.setState({
+    //   saveArtist: artistName,
+    // });
   };
 
   enableButton = () => {
@@ -22,8 +32,28 @@ class Search extends React.Component {
     );
   };
 
+  searchAPI = async (event) => {
+    event.preventDefault();
+    const { artistName } = this.state;
+    this.setState({
+      // saveArtist: artistName,
+      isLoading: false,
+      click: true,
+    });
+    const api = await searchAlbumsAPI(`${artistName}`);
+    this.setState((prev) => ({
+      isLoading: false,
+      saveArtist: prev.artistName,
+      artistName: '',
+      results: api,
+    }));
+    // .then(this.setState({ isLoading: true }))
+    // .then(console.log(artistName))
+    // .then(this.setState({ searchResults: true }));
+  };
+
   render() {
-    const { artistName, buttonOn } = this.state;
+    const { artistName, buttonOn, isLoading, saveArtist, results, click } = this.state;
     return (
       <div data-testid="page-search">
         <Header />
@@ -43,11 +73,29 @@ class Search extends React.Component {
             type="submit"
             data-testid="search-artist-button"
             disabled={ buttonOn }
-            // onClick={ this.handleAPI }
+            onClick={ this.searchAPI }
           >
             Pesquisar
           </button>
         </form>
+        { isLoading
+          ? <Loading />
+          : null }
+        { click
+          ? <div>{`Resultado de álbuns de: ${saveArtist}`}</div>
+          : null}
+        { (results.length > 0)
+          ? (results.map((element, index) => (
+            <li key={ index }>
+              <Link
+                to={ `/album/${element.collectionId}` }
+                data-testid={ `link-to-album-${element.collectionId}` }
+              >
+                {element.collectionName}
+              </Link>
+            </li>
+          )))
+          : <div>Nenhum álbum foi encontrado</div>}
       </div>
     );
   }
