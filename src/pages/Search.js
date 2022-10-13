@@ -87,6 +87,7 @@ class Search extends React.Component {
         { (results.length > 0)
           ? (results.map((element, index) => (
             <li key={ index }>
+              <img src={ element.artworkUrl100 } alt={ element.alt } />
               <Link
                 to={ `/album/${element.collectionId}` }
                 data-testid={ `link-to-album-${element.collectionId}` }
