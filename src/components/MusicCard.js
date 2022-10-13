@@ -1,7 +1,7 @@
 import React from 'react';
 import propTypes from 'prop-types';
 // import { BrowserRouter } from 'react-router-dom';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
 
 class MusicCard extends React.Component {
@@ -11,6 +11,25 @@ class MusicCard extends React.Component {
     favMusicObject: '',
     loading: false,
     favoriteSongs: [{ trackId: 10 }, {}],
+  };
+
+  componentDidMount() {
+    this.getMyFavoriteSongs();
+  }
+
+  getMyFavoriteSongs = async () => {
+    // const { songs: { trackId } } = this.props;
+    // const { tracks } = this.props;
+    // const filteredTracks = tracks.filter((track) => track.wrapperType !== 'collection');
+    // const { favoriteSongs } = this.state;
+    const favorites = await getFavoriteSongs();
+    // console.log(favorites);
+    this.setState({ favoriteSongs: favorites });
+    // const maracutaia = favorites.find((favorite) => favorite.trackId === filteredTracks.forEach((track) => trackId))
+    // console.log(maracutaia);
+    // this.setState({
+    //   myFavorites: 'a',
+    // });
   };
 
   handleCheckboxClick = (event) => {
@@ -27,11 +46,11 @@ class MusicCard extends React.Component {
         favoriteSongs: newFavorites });
     } else {
       this.setState({ selectedSongID: song,
-        favoriteCheck: true }, this.getFavoriteSong);
+        favoriteCheck: true }, this.addFavSong);
     }
   };
 
-  getFavoriteSong = () => {
+  addFavSong = () => {
     const { selectedSongID } = this.state;
     const { tracks } = this.props;
     const musicObject = tracks.filter(
