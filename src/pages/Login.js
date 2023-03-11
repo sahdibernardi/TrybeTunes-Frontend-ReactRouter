@@ -1,8 +1,10 @@
 import React from 'react';
 // import { BrowserRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { TbPlaylist } from 'react-icons/tb';
 import { createUser } from '../services/userAPI';
 import Loading from '../components/Loading';
+import bgImage from '../midia/login-bg.jpg';
 
 class Login extends React.Component {
   state = {
@@ -44,26 +46,38 @@ class Login extends React.Component {
         {isLoading
           ? <Loading />
           : (
-            <form>
-              <label htmlFor="name">
-                <input
-                  type="text"
-                  id="name"
-                  data-testid="login-name-input"
-                  onChange={ this.handleChange }
-                  name="name"
-                  value={ name }
-                />
-              </label>
-              <button
-                type="submit"
-                data-testid="login-submit-button"
-                disabled={ buttonOn }
-                onClick={ this.handleAPI }
-              >
-                Entrar
-              </button>
-            </form>
+            <div className="login">
+              <img src={ bgImage } alt="img" className="image-login" />
+              <div className="form">
+                <TbPlaylist id="logo" />
+                <div className="headline">
+                  <h1>All your music.</h1>
+                  <h1>At the same place.</h1>
+                </div>
+                <form>
+                  <label htmlFor="name">
+                    <input
+                      type="text"
+                      id="name"
+                      data-testid="login-name-input"
+                      placeholder="your best email"
+                      onChange={ this.handleChange }
+                      name="name"
+                      value={ name }
+                    />
+                  </label>
+                  <button
+                    type="submit"
+                    data-testid="login-submit-button"
+                    id="login-submit-button"
+                    disabled={ buttonOn }
+                    onClick={ this.handleAPI }
+                  >
+                    Login
+                  </button>
+                </form>
+              </div>
+            </div>
           )}
       </div>
     );
